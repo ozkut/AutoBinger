@@ -14,4 +14,5 @@
 **4)** Enter one search term per line to be searched.
 
 ## <ins>Important notes</ins>
-The selenium-manager folder and its contents that are created by the program are necessary for the functionality of the program. Do not delete them.
+- The selenium-manager folder and its contents that are created by the program are necessary for the functionality of the program. Do not delete them.
+- Make sure the appropriate .NET version is installed on the system. In this case .NET 8 runtime. Make sure the x64 or x86 of the runtime matches the version of the downloaded program.
