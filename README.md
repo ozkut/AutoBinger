@@ -12,3 +12,6 @@
 - If no value is entered, the program will default to true.
 
 **4)** Enter one search term per line to be searched.
+
+## <ins>Important notes</ins>
+The selenium-manager folder and its contents that are created by the program are necessary for the functionality of the program. Do not delete them.
