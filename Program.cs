@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Edge;
+using AutoBinger.Properties;
+using OpenQA.Selenium.DevTools.V132.WebAuthn;
 
 namespace AutoBinger
 {
@@ -19,7 +21,13 @@ namespace AutoBinger
 
         public static async Task Main(string[] args)
         {
-            string filePath = Path.Combine(Environment.GetFolderPath(RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? Environment.SpecialFolder.Desktop : Environment.SpecialFolder.UserProfile), "terms.txt");
+            bool isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+
+            string currentFolder = Path.Combine([Environment.CurrentDirectory, "selenium-manager", (isWindows ? "windows" : "linux")]);
+            _ = Directory.CreateDirectory(currentFolder);
+            await File.WriteAllBytesAsync(Path.Combine(currentFolder, isWindows ? "selenium-manager.exe" : "selenium-manager"), isWindows ? Resources.selenium_manager_win : Resources.selenium_manager_linux);
+
+            string filePath = Path.Combine(Environment.GetFolderPath(isWindows ? Environment.SpecialFolder.Desktop : Environment.SpecialFolder.UserProfile), "terms.txt");
             if (!File.Exists(filePath))
                 Exit($"The file \"{filePath}\" does not exits!", true);
 
