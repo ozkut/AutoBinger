@@ -37,13 +37,21 @@ namespace AutoBinger
             if (!isValidUnattendedVar)
                 isUnattended = true;
             
-            using EdgeDriver driver = new();
+            EdgeOptions options = new();
+            options.AddExcludedArgument("enable-automation");
+            options.AddAdditionalOption("useAutomationExtension", false);
+
+            using EdgeDriver driver = new(options);
             driver.Manage().Window.Maximize();
             await driver.Navigate().GoToUrlAsync("https://www.bing.com");
             await Task.Delay(delay);
             
-            IWebElement cookieButton = driver.FindElement(By.Id("bnp_btn_reject"));
-            cookieButton.Click();
+            try
+            {
+                IWebElement cookieButton = driver.FindElement(By.Id("bnp_btn_reject"));
+                cookieButton.Click();
+            }
+            catch (NoSuchElementException) { }
 
             if (!isUnattended)
             {
@@ -51,13 +59,18 @@ namespace AutoBinger
                 Console.WriteLine("Start");
             }
 
+            Random random = new();
             for (int i = 1 + (!isValidUnattendedVar ? 0 : 1); i < terms.Length; i++)
             {
                 IWebElement searchBox = driver.FindElement(By.Name("q"));
                 searchBox.Clear();
-                searchBox.SendKeys(terms[i]);
+                for (int j = 0; j < terms[i].Length; j++)
+                {
+                    searchBox.SendKeys(terms[i][j].ToString());
+                    await Task.Delay(100 + random.Next(50, 77));
+                }
                 searchBox.SendKeys(Keys.Enter);
-                await Task.Delay(delay);
+                await Task.Delay(delay + random.Next(200));
             }
 
             if (!isUnattended)
